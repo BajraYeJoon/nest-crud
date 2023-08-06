@@ -3,49 +3,69 @@ import {
   Get,
   Post,
   Body,
-  Param,
-  Delete,
-  Put,
-  Query,
+  // Param,
+  // Delete,
+  // Put,
+  // Query,
+  // Controller,
 } from '@nestjs/common';
 import {
   CreateRecipeDto,
-  UpdateRecipeDto,
-  ListAllEntities,
+  // UpdateRecipeDto,
+  // ListAllEntities,
 } from './dto/create-recipe.dto';
+import { RecipesService } from './recipes.service';
+import { Recipe } from './interfaces/recipe.interface';
 
 @Controller('recipes')
 export class RecipesController {
+  constructor(private recipesServices: RecipesService) {}
+
   @Post()
-  create(@Body() createRecipeDto: CreateRecipeDto) {
-    return createRecipeDto;
+  async create(@Body() createRecipeDto: CreateRecipeDto) {
+    this.recipesServices.create(createRecipeDto);
   }
 
   @Get()
-  findAll(@Query() query: ListAllEntities) {
-    return `This action returns all recipes (limit: ${query.limit} items)`;
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return `This action returns a #${id} recipe`;
-  }
-
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
-    return `This action updates a #${id} recipe`;
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return `This action removes a #${id} recipe`;
-  }
-
-  @Get('aa')
-  sdfg(@Query() query: ListAllEntities) {
-    return `This action returns all recipes (limit: ${query.limit} items)`;
+  async findAll(): Promise<Recipe[]> {
+    return this.recipesServices.findAll();
   }
 }
+
+// Basic REST functionality
+
+// @Controller('recipes')
+// export class RecipesController {
+//   @Post()
+//   create(@Body() createRecipeDto: CreateRecipeDto) {
+//     return createRecipeDto;
+//   }
+
+//   @Get()
+//   findAll(@Query() query: ListAllEntities) {
+//     return `This action returns all recipes (limit: ${query.limit} items)`;
+//   }
+
+//   @Get(':id')
+//   findOne(@Param('id') id: string) {
+//     return `This action returns a #${id} recipe`;
+//   }
+
+//   @Put(':id')
+//   update(@Param('id') id: string, @Body() updateRecipeDto: UpdateRecipeDto) {
+//     return `This action updates a #${id} recipe`;
+//   }
+
+//   @Delete(':id')
+//   remove(@Param('id') id: string) {
+//     return `This action removes a #${id} recipe`;
+//   }
+
+//   @Get('aa')
+//   sdfg(@Query() query: ListAllEntities) {
+//     return `This action returns all recipes (limit: ${query.limit} items)`;
+//   }
+// }
 
 // import {
 //   Controller,
