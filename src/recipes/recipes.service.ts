@@ -12,4 +12,8 @@ export class RecipesService {
   findAll(): Recipe[] {
     return this.recipes;
   }
+
+  findOne(id: number): Recipe {
+    return this.recipes[id];
+  }
 }

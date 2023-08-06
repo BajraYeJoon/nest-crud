@@ -3,6 +3,12 @@ import {
   Get,
   Post,
   Body,
+  HttpException,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  UseInterceptors,
+
   // Param,
   // Delete,
   // Put,
@@ -16,12 +22,16 @@ import {
 } from './dto/create-recipe.dto';
 import { RecipesService } from './recipes.service';
 import { Recipe } from './interfaces/recipe.interface';
+import { Roles } from 'src/auth/roles.decorator';
+import { InterceptorLogger } from 'src/interceptor/logging.interceptor';
 
 @Controller('recipes')
+@UseInterceptors(InterceptorLogger)
 export class RecipesController {
   constructor(private recipesServices: RecipesService) {}
 
   @Post()
+  @Roles('admin')
   async create(@Body() createRecipeDto: CreateRecipeDto) {
     this.recipesServices.create(createRecipeDto);
   }
@@ -30,6 +40,17 @@ export class RecipesController {
   async findAll(): Promise<Recipe[]> {
     return this.recipesServices.findAll();
   }
+
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.recipesServices.findOne(id);
+  }
+
+  //For exception handling
+  // @Get()
+  // async findAll() {
+  //   throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+  // }
 }
 
 // Basic REST functionality

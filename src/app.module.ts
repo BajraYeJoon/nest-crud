@@ -6,9 +6,16 @@ import {
 } from '@nestjs/common';
 import { RecipesModule } from './recipes/recipes.module';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
-import path from 'path';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
   imports: [RecipesModule],
 })
 export class AppModule implements NestModule {
